@@ -1,0 +1,33 @@
+/* FIFO queue: layout only. Movement/appearance is controlled by GraphBlock.tsx. */
+
+.queue-items {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.queue-item {
+  width: auto !important;
+  min-width: 30px;
+  height: 30px;
+  min-height: 30px;
+  padding: 0 8px;
+  box-sizing: border-box;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 7px;
+  background: #314879;
+  color: white;
+  font-weight: 700;
+
+  white-space: nowrap;
+  flex: 0 0 auto;
+
+  /* Prevent smooth-animations.css from adding its own keyframe animation. */
+  animation: none !important;
+  will-change: transform, opacity;
+}
