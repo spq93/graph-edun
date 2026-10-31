@@ -386,6 +386,21 @@ function App() {
   const [backupMessage, setBackupMessage] = useState('')
   const [logsMessage, setLogsMessage] = useState('')
 
+  // Hidden editor toggle: Ctrl+Shift+E. This hides the control from learners,
+  // but is not a security boundary for a public client-side application.
+  useEffect(() => {
+    function handleEditorShortcut(event: KeyboardEvent) {
+      if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 'e') {
+        event.preventDefault()
+        setEditing((current) => !current)
+      } else if (event.key === 'Escape') {
+        setEditing(false)
+      }
+    }
+    window.addEventListener('keydown', handleEditorShortcut)
+    return () => window.removeEventListener('keydown', handleEditorShortcut)
+  }, [])
+
   async function importGraphEduBackup(file: File) {
     try {
       const parsed = JSON.parse(await file.text()) as Partial<GraphEduBackup>
@@ -738,9 +753,6 @@ function App() {
             <button type="button" className="button" onClick={() => importFileRef.current?.click()}>Импорт данных</button>
             <input ref={importFileRef} type="file" accept=".json,application/json" hidden onChange={(event) => { const file = event.currentTarget.files?.[0]; if (file) void importGraphEduBackup(file) }} />
           </>}
-          <button className={editing ? 'button primary' : 'button'} onClick={() => setEditing((current) => !current)}>
-            {editing ? 'Готово' : 'Редактировать'}
-          </button>
         </div>
       </header>
       {backupMessage && <div className="course-notice" role="status">{backupMessage}</div>}
